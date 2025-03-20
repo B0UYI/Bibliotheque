@@ -1,8 +1,0 @@
-com\bibliotheque\controller\LivreController.class
-com\bibliotheque\controller\AdminController.class
-com\bibliotheque\model\Admin.class
-com\bibliotheque\view\App.class
-com\bibliotheque\repository\AdminRepository.class
-com\bibliotheque\model\Utilisateur.class
-com\bibliotheque\model\Livre.class
-com\bibliotheque\repository\LivreRepository.class
