@@ -38,11 +38,24 @@
             <version>8.0.29</version>
         </dependency>
 
-        <!-- JUnit pour les tests -->
+        <!-- JUnit 5 pour les tests -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.9.2</version>
+        </dependency>
+
+        <!-- JaCoCo pour la couverture de tests -->
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>org.jacoco.agent</artifactId>
+            <version>0.8.8</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -77,19 +90,35 @@
                 </configuration>
             </plugin>
 
+            <!-- Plugin JaCoCo pour la couverture des tests -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.8</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- JavaDoc Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.3.2</version>
                 <configuration>
-                    <!-- Encodage utilisé pour lire les sources Java -->
                     <encoding>UTF-8</encoding>
-
-                    <!-- Encodage utilisé pour générer la documentation -->
                     <docencoding>UTF-8</docencoding>
-
-                    <!-- Paramètre -charset pour la commande javadoc -->
                     <charset>UTF-8</charset>
                 </configuration>
             </plugin>
@@ -104,4 +133,3 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 </project>
-
