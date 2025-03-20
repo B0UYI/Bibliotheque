@@ -7,19 +7,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Classe permettant la gestion des administrateurs (connexion à la BDD).
+ * Classe permettant la gestion des administrateurs dans la base de données.
+ * Elle fournit des méthodes pour vérifier l'authentification des administrateurs.
  */
+
 public class AdminRepository {
     private static final String URL = "jdbc:mysql://localhost:3306/bibliotheque";
     private static final String USER = "root";
     private static final String PASSWORD = "Aqwzsxedc12345-";
 
     /**
-     * Vérifie si un administrateur existe en base de données.
-     * @param codeAdmin Le code administrateur.
-     * @param password Le mot de passe administrateur.
-     * @return true si les identifiants sont corrects, sinon false.
+     * Vérifie si un administrateur existe en base de données en comparant ses identifiants.
+     *
+     * @param codeAdmin Le code administrateur unique.
+     * @param password Le mot de passe associé à l'administrateur.
+     * @return true si les identifiants sont corrects et existent en base, sinon false.
+     * @throws SQLException En cas d'erreur lors de la connexion à la base de données.
      */
+
     public boolean authentifierAdmin(String codeAdmin, String password) {
         String sql = "SELECT * FROM admins WHERE code_admin = ? AND password = ?";
 

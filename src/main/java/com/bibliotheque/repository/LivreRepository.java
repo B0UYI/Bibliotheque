@@ -7,18 +7,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Gère les opérations sur la base de données des livres.
+ * Gère les interactions avec la base de données pour la gestion des livres.
+ * Permet d'effectuer des opérations CRUD sur les livres : récupération, ajout,
+ * modification, suppression et mise à jour du statut.
  */
+
 public class LivreRepository {
     private static final String URL = "jdbc:mysql://localhost:3306/bibliotheque";
     private static final String USER = "root";
     private static final String PASSWORD = "Aqwzsxedc12345-";
 
     /**
-     * Récupère tous les livres disponibles dans la base de données.
+     * Récupère tous les livres stockés dans la base de données.
      *
-     * @return Liste des livres.
+     * @return Une liste de tous les livres disponibles.
+     * En cas d'erreur SQL, une liste vide est retournée et une erreur est affichée.
      */
+
     public List<Livre> listerLivres() {
         List<Livre> livres = new ArrayList<>();
         String sql = "SELECT * FROM livres";
@@ -45,10 +50,12 @@ public class LivreRepository {
     }
 
     /**
-     * Ajoute un livre à la base de données.
+     * Ajoute un nouveau livre dans la base de données.
      *
-     * @param livre Livre à ajouter.
+     * @param livre Le livre à ajouter.
+     * Si l'ajout échoue (problème de connexion ou contrainte SQL), une erreur est affichée.
      */
+
     public void ajouterLivre(Livre livre) {
         String sql = "INSERT INTO livres (ISBN, titre, auteur, annee_publication, etat, statut) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -66,10 +73,13 @@ public class LivreRepository {
     }
 
     /**
-     * Modifie les informations d'un livre.
+     * Modifie les informations d'un livre existant dans la base de données.
+     * La modification est basée sur l'ISBN du livre.
      *
-     * @param livre Livre à modifier.
+     * @param livre Le livre contenant les nouvelles informations.
+     * Si l'ISBN n'existe pas, aucune modification n'est effectuée.
      */
+
     public void modifierLivre(Livre livre) {
         String sql = "UPDATE livres SET titre = ?, auteur = ?, annee_publication = ?, etat = ?, statut = ? WHERE ISBN = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -87,10 +97,12 @@ public class LivreRepository {
     }
 
     /**
-     * Supprime un livre de la base de données.
+     * Supprime un livre de la base de données en fonction de son ISBN.
      *
-     * @param isbn ISBN du livre à supprimer.
+     * @param isbn L'ISBN du livre à supprimer.
+     * Si le livre n'existe pas en base, aucune suppression n'est effectuée.
      */
+
     public void supprimerLivre(String isbn) {
         String sql = "DELETE FROM livres WHERE ISBN = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -103,11 +115,13 @@ public class LivreRepository {
     }
 
     /**
-     * Met à jour le statut d'un livre (ex: disponible -> emprunté).
+     * Met à jour le statut d'un livre dans la base de données (ex: disponible -> emprunté).
      *
-     * @param isbn ISBN du livre.
-     * @param nouveauStatut Nouveau statut du livre.
+     * @param isbn ISBN du livre concerné.
+     * @param nouveauStatut Le nouveau statut du livre (ex: "disponible", "emprunté").
+     * En cas d'erreur SQL, une erreur est affichée.
      */
+
     public void mettreAJourStatutLivre(String isbn, String nouveauStatut) {
         String sql = "UPDATE livres SET statut = ? WHERE ISBN = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);

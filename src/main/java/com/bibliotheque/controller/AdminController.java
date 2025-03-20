@@ -3,8 +3,10 @@ package com.bibliotheque.controller;
 import com.bibliotheque.repository.AdminRepository;
 
 /**
- * Gère l'authentification des administrateurs.
+ * Contrôleur permettant la gestion de l'authentification des administrateurs.
+ * Vérifie les identifiants fournis et renvoie un résultat indiquant si la connexion est réussie.
  */
+
 public class AdminController {
     private final AdminRepository adminRepository = new AdminRepository();
 

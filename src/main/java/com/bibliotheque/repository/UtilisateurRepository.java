@@ -4,21 +4,25 @@ import java.sql.*;
 import java.time.LocalDate;
 
 /**
- * Gère les opérations liées aux utilisateurs et aux emprunts.
+ * Gère les interactions avec la base de données pour la gestion des utilisateurs et des emprunts.
+ * Permet d'ajouter un emprunt, de vérifier l'existence d'un utilisateur, et d'ajouter un nouvel utilisateur si nécessaire.
  */
+
 public class UtilisateurRepository {
     private static final String URL = "jdbc:mysql://localhost:3306/bibliotheque";
     private static final String USER = "root";
     private static final String PASSWORD = "Aqwzsxedc12345-";
 
     /**
-     * Ajoute un emprunt en base de données.
+     * Ajoute un emprunt dans la base de données pour un utilisateur donné.
      *
-     * @param utilisateurId ID de l'utilisateur qui emprunte.
+     * @param utilisateurId ID de l'utilisateur qui emprunte le livre.
      * @param isbn ISBN du livre emprunté.
      * @param dateEmprunt Date de l'emprunt.
-     * @return true si l'emprunt a été ajouté, sinon false.
+     * @return true si l'emprunt a été enregistré avec succès, false en cas d'erreur SQL.
+     * En cas d'échec, une erreur est affichée dans la console.
      */
+
     public boolean ajouterEmprunt(int utilisateurId, String isbn, LocalDate dateEmprunt) {
         String query = "INSERT INTO emprunts (utilisateur_id, ISBN, date_emprunt, date_retour) VALUES (?, ?, ?, ?)";
 
@@ -39,14 +43,17 @@ public class UtilisateurRepository {
     }
 
     /**
-     * Ajoute un utilisateur s'il n'existe pas en base de données.
+     * Vérifie si un utilisateur existe déjà en base de données grâce à son e-mail.
+     * Si l'utilisateur n'existe pas, il est ajouté et son ID est retourné.
      *
      * @param nom Nom de l'utilisateur.
      * @param prenom Prénom de l'utilisateur.
-     * @param email Adresse e-mail de l'utilisateur.
+     * @param email Adresse e-mail unique de l'utilisateur.
      * @param telephone Numéro de téléphone de l'utilisateur.
-     * @return L'ID de l'utilisateur existant ou nouvellement ajouté, -1 en cas d'erreur.
+     * @return L'ID de l'utilisateur existant ou nouvellement ajouté, -1 en cas d'erreur SQL.
+     * Une erreur est affichée en console si l'opération échoue.
      */
+
     public int ajouterUtilisateurSiInexistant(String nom, String prenom, String email, String telephone) {
         int utilisateurId = -1;
         String checkUserQuery = "SELECT id FROM utilisateurs WHERE email = ?";

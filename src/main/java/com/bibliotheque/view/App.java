@@ -20,8 +20,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Interface utilisateur de l'application.
+ * Classe principale représentant l'interface utilisateur de l'application de gestion de bibliothèque.
+ * Cette classe gère l'affichage des livres, l'authentification des administrateurs,
+ * l'emprunt et la gestion des livres via une interface JavaFX.
  */
+
 public class App extends Application {
     private final AdminController adminController = new AdminController();
     private final LivreController livreController = new LivreController();
@@ -34,6 +37,13 @@ public class App extends Application {
 
     private ObservableList<Livre> listeLivres;
     private FilteredList<Livre> filteredLivres;
+
+    /**
+     * Initialise et affiche l'interface utilisateur de l'application.
+     * Configure les boutons, la table des livres et la barre de recherche.
+     *
+     * @param stage La scène principale de l'application JavaFX.
+     */
 
     @Override
     public void start(Stage stage) {
@@ -80,12 +90,22 @@ public class App extends Application {
         stage.show();
     }
 
+    /**
+     * Charge les livres depuis la base de données et les affiche dans la table.
+     * Met à jour la liste observable pour permettre la recherche et le filtrage.
+     */
+
     private void loadBooks() {
         List<Livre> livres = livreController.getAllLivres();
         listeLivres = FXCollections.observableArrayList(livres);
         filteredLivres = new FilteredList<>(listeLivres, p -> true);
         tableView.setItems(filteredLivres);
     }
+
+    /**
+     * Configure l'affichage de la table des livres en ajoutant les colonnes pour
+     * ISBN, titre, auteur, année de publication, état et statut.
+     */
 
     private void setupTableView() {
         TableColumn<Livre, String> colISBN = new TableColumn<>("ISBN");
@@ -111,7 +131,9 @@ public class App extends Application {
 
     /**
      * Configure la barre de recherche pour filtrer les livres affichés dans la table.
+     * Permet de rechercher un livre par ISBN, titre, auteur, année, état ou statut.
      */
+
     private void setupSearchFilter() {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredLivres.setPredicate(livre -> {
@@ -129,6 +151,11 @@ public class App extends Application {
         });
     }
 
+    /**
+     * Ouvre une boîte de dialogue permettant à un utilisateur d'emprunter un livre.
+     * L'utilisateur doit fournir son nom, prénom, e-mail, téléphone et une date d'emprunt.
+     * En cas de succès, le livre est marqué comme "indisponible" dans la base de données.
+     */
 
     private void emprunterLivre() {
         Livre livreSelectionne = tableView.getSelectionModel().getSelectedItem();
@@ -182,6 +209,12 @@ public class App extends Application {
         });
     }
 
+    /**
+     * Ouvre une boîte de dialogue demandant l'ISBN du livre à ajouter.
+     * Récupère les informations du livre via l'API ISBN et l'ajoute à la base de données.
+     * Affiche un message de succès ou d'erreur selon le résultat.
+     */
+
     private void ajouterLivre() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Ajouter un livre");
@@ -201,6 +234,13 @@ public class App extends Application {
         });
     }
 
+    /**
+     * Affiche une boîte de dialogue avec un message d'alerte.
+     *
+     * @param type Type d'alerte (information, avertissement, erreur).
+     * @param title Titre de la boîte de dialogue.
+     * @param message Message à afficher à l'utilisateur.
+     */
 
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
@@ -211,8 +251,11 @@ public class App extends Application {
     }
 
     /**
-     * Affiche une boîte de dialogue pour modifier un livre existant.
+     * Ouvre une boîte de dialogue permettant de modifier les informations d'un livre sélectionné.
+     * L'utilisateur peut modifier le titre, l'auteur, l'année de publication, l'état et le statut.
+     * Une fois validé, les modifications sont enregistrées en base de données.
      */
+
     private void modifierLivre() {
         Livre livreSelectionne = tableView.getSelectionModel().getSelectedItem();
         if (livreSelectionne == null) {
@@ -259,8 +302,11 @@ public class App extends Application {
     }
 
     /**
-     * Supprime un livre sélectionné.
+     * Supprime un livre sélectionné après confirmation de l'utilisateur.
+     * Affiche une boîte de dialogue pour demander la confirmation avant suppression.
+     * Met à jour la liste des livres après la suppression.
      */
+
     private void supprimerLivre() {
         Livre livreSelectionne = tableView.getSelectionModel().getSelectedItem();
         if (livreSelectionne == null) {
@@ -279,8 +325,11 @@ public class App extends Application {
     }
 
     /**
-     * Affiche la boîte de dialogue de connexion administrateur.
+     * Affiche une boîte de dialogue pour l'authentification administrateur.
+     * L'utilisateur doit entrer son code administrateur et son mot de passe.
+     * Si l'authentification réussit, les boutons de gestion des livres sont activés.
      */
+
     private void showLoginDialog() {
         Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Connexion Admin");

@@ -5,14 +5,19 @@ import com.bibliotheque.repository.UtilisateurRepository;
 import java.time.LocalDate;
 
 /**
- * Contrôleur pour gérer les utilisateurs et les emprunts de livres.
+ * Contrôleur gérant les utilisateurs et leurs emprunts de livres.
+ * Permet de vérifier l'existence d'un utilisateur, d'ajouter un emprunt
+ * et de mettre à jour le statut des livres empruntés.
  */
+
 public class UtilisateurController {
     private final UtilisateurRepository utilisateurRepository = new UtilisateurRepository();
     private final LivreRepository livreRepository = new LivreRepository();
 
     /**
-     * Permet à un utilisateur d'emprunter un livre.
+     * Permet à un utilisateur d'emprunter un livre en vérifiant ses informations.
+     * Si l'utilisateur n'existe pas, il est ajouté à la base de données.
+     * Une fois l'emprunt validé, le statut du livre est mis à jour en "indisponible".
      *
      * @param nom Nom de l'utilisateur.
      * @param prenom Prénom de l'utilisateur.
@@ -20,8 +25,9 @@ public class UtilisateurController {
      * @param telephone Numéro de téléphone de l'utilisateur.
      * @param isbn ISBN du livre à emprunter.
      * @param dateEmprunt Date de l'emprunt.
-     * @return true si l'emprunt réussit, sinon false.
+     * @return true si l'emprunt est enregistré avec succès, sinon false.
      */
+
     public boolean emprunterLivre(String nom, String prenom, String email, String telephone, String isbn, LocalDate dateEmprunt) {
         // Vérifier que tous les champs sont remplis
         if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || telephone.isEmpty() || isbn.isEmpty()) {

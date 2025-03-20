@@ -12,46 +12,55 @@ import java.util.Scanner;
 import org.json.JSONObject;
 
 /**
- * Gère les opérations sur les livres.
+ * Contrôleur gérant les opérations sur les livres de la bibliothèque.
+ * Permet d'ajouter, modifier, supprimer des livres et de récupérer leurs informations,
+ * y compris via l'API OpenLibrary.
  */
+
 public class LivreController {
     private final LivreRepository livreRepository = new LivreRepository();
 
     /**
-     * Récupère tous les livres depuis la base de données.
+     * Récupère tous les livres stockés dans la base de données.
      *
-     * @return Liste des livres.
+     * @return Une liste contenant tous les livres enregistrés.
      */
+
     public List<Livre> getAllLivres() {
         return livreRepository.listerLivres();
     }
 
     /**
-     * Ajoute un livre à la base de données.
+     * Ajoute un livre dans la base de données et s'assure que son statut est en minuscule.
      *
-     * @param livre Livre à ajouter.
+     * @param livre Le livre à ajouter.
      */
+
     public void ajouterLivre(Livre livre) {
         livre.setStatut(livre.getStatut().toLowerCase()); // Force en minuscule
         livreRepository.ajouterLivre(livre);
     }
 
     /**
-     * Modifie les informations d'un livre.
+     * Modifie les informations d'un livre existant dans la base de données.
+     * Le statut du livre est systématiquement converti en minuscule avant l'enregistrement.
      *
-     * @param livre Livre à modifier.
+     * @param livre Le livre à modifier.
      */
+
     public void modifierLivre(Livre livre) {
         livre.setStatut(livre.getStatut().toLowerCase()); // Force en minuscule
         livreRepository.modifierLivre(livre);
     }
 
     /**
-     * Récupère les informations d'un livre depuis OpenLibrary en utilisant son ISBN.
+     * Récupère les informations d'un livre depuis l'API OpenLibrary à partir de son ISBN.
+     * Si aucune donnée n'est trouvée, des valeurs par défaut sont utilisées.
      *
-     * @param isbn ISBN du livre.
-     * @return Livre contenant les informations récupérées.
+     * @param isbn L'ISBN du livre à rechercher.
+     * @return Un objet Livre avec les informations récupérées ou des valeurs par défaut si indisponibles.
      */
+
     public Livre getLivreFromISBN(String isbn) {
         String apiUrl = "https://openlibrary.org/api/books?bibkeys=ISBN:" + isbn + "&format=json&jscmd=data";
         try {
@@ -81,10 +90,11 @@ public class LivreController {
     }
 
     /**
-     * Supprime un livre de la base de données.
+     * Supprime un livre de la base de données en fonction de son ISBN.
      *
-     * @param isbn ISBN du livre à supprimer.
+     * @param isbn L'ISBN du livre à supprimer.
      */
+
     public void supprimerLivre(String isbn) {
         livreRepository.supprimerLivre(isbn);
     }
