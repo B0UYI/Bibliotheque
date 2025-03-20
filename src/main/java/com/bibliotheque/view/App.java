@@ -15,7 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Pair;
-
+import java.util.Optional;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -160,19 +160,32 @@ public class App extends Application {
         });
     }
 
+    private void ajouterLivre() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Ajouter un livre");
+        dialog.setHeaderText("Entrez l'ISBN du livre à ajouter");
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(isbn -> {
+            Livre livre = livreController.getLivreFromISBN(isbn);
+            if (livre != null) {
+                // Ajouter le livre dans la base de données
+                livreController.ajouterLivre(livre);
+                loadBooks();  // Rafraîchit la liste des livres affichée
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Livre ajouté avec succès !");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de récupérer les informations du livre.");
+            }
+        });
+    }
+
+
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    /**
-     * Affiche une boîte de dialogue pour ajouter un livre.
-     */
-    private void ajouterLivre() {
-        showAlert(Alert.AlertType.INFORMATION, "Information", "Ajout d'un livre non implémenté.");
     }
 
     /**

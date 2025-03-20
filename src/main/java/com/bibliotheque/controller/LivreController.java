@@ -47,15 +47,6 @@ public class LivreController {
     }
 
     /**
-     * Supprime un livre de la base de données.
-     *
-     * @param isbn ISBN du livre à supprimer.
-     */
-    public void supprimerLivre(String isbn) {
-        livreRepository.supprimerLivre(isbn);
-    }
-
-    /**
      * Récupère les informations d'un livre depuis OpenLibrary en utilisant son ISBN.
      *
      * @param isbn ISBN du livre.
@@ -87,5 +78,14 @@ public class LivreController {
             System.err.println("Erreur lors de la récupération des informations du livre : " + e.getMessage());
         }
         return null;
+    }
+
+    /**
+     * Supprime un livre de la base de données.
+     *
+     * @param isbn ISBN du livre à supprimer.
+     */
+    public void supprimerLivre(String isbn) {
+        livreRepository.supprimerLivre(isbn);
     }
 }
