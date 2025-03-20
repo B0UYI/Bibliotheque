@@ -52,6 +52,7 @@ public class App extends Application {
         btnBorrowBook.setOnAction(e -> emprunterLivre());
 
         setupTableView();
+        setupSearchFilter();
         loadBooks();
 
         searchField.setPromptText("Rechercher...");
@@ -107,6 +108,27 @@ public class App extends Application {
 
         tableView.getColumns().setAll(colISBN, colTitre, colAuteur, colAnnee, colEtat, colStatut);
     }
+
+    /**
+     * Configure la barre de recherche pour filtrer les livres affichés dans la table.
+     */
+    private void setupSearchFilter() {
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredLivres.setPredicate(livre -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+                return livre.getISBN().toLowerCase().contains(lowerCaseFilter)
+                        || livre.getTitre().toLowerCase().contains(lowerCaseFilter)
+                        || livre.getAuteur().toLowerCase().contains(lowerCaseFilter)
+                        || String.valueOf(livre.getAnneePublication()).contains(lowerCaseFilter)
+                        || livre.getEtat().toLowerCase().contains(lowerCaseFilter)
+                        || livre.getStatut().toLowerCase().contains(lowerCaseFilter);
+            });
+        });
+    }
+
 
     private void emprunterLivre() {
         Livre livreSelectionne = tableView.getSelectionModel().getSelectedItem();
