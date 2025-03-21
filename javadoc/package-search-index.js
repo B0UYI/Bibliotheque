@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.bibliotheque.controller"},{"l":"com.bibliotheque.model"},{"l":"com.bibliotheque.repository"},{"l":"com.bibliotheque.view"}];updateSearchResults();
