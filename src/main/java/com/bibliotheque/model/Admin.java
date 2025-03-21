@@ -1,10 +1,11 @@
 package com.bibliotheque.model;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 /**
  * Modèle représentant un administrateur de la bibliothèque.
  * Contient les informations nécessaires pour l'authentification.
  */
-
 public class Admin {
     private String codeAdmin;
     private String password;
@@ -13,25 +14,23 @@ public class Admin {
      * Constructeur avec paramètres.
      *
      * @param codeAdmin Code unique de l'administrateur.
-     * @param password  Mot de passe de l'administrateur (hashé de préférence).
+     * @param password  Mot de passe haché (récupéré tel quel depuis la base).
      */
     public Admin(String codeAdmin, String password) {
         this.codeAdmin = codeAdmin;
-        this.password = password;
+        this.password = password; // Pas de hash ici, on récupère depuis la base
     }
 
     /**
-     * Constructeur vide (nécessaire pour certaines utilisations comme Hibernate).
+     * Constructeur vide requis pour certaines opérations comme JDBC ou JavaFX.
      */
-
     public Admin() {}
 
     /**
-     * Retourne le code administrateur unique.
+     * Retourne le code administrateur.
      *
-     * @return Le code administrateur.
+     * @return Le code admin.
      */
-
     public String getCodeAdmin() {
         return codeAdmin;
     }
@@ -39,46 +38,46 @@ public class Admin {
     /**
      * Définit le code administrateur.
      *
-     * @param codeAdmin Le nouveau code administrateur.
+     * @param codeAdmin Le code à définir.
      */
-
     public void setCodeAdmin(String codeAdmin) {
         this.codeAdmin = codeAdmin;
     }
 
     /**
-     * Retourne le mot de passe de l'administrateur.
-     * Il est recommandé d'utiliser un hash sécurisé.
+     * Retourne le mot de passe (déjà haché).
      *
-     * @return Le mot de passe de l'administrateur.
+     * @return Le mot de passe haché.
      */
-
     public String getPassword() {
         return password;
     }
 
     /**
-     * Définit le mot de passe de l'administrateur.
-     * Il est recommandé de stocker un mot de passe hashé pour plus de sécurité.
+     * Définit le mot de passe tel quel (ne pas hacher ici).
      *
-     * @param password Le nouveau mot de passe de l'administrateur.
+     * @param password Mot de passe haché à affecter.
      */
-
     public void setPassword(String password) {
         this.password = password;
     }
 
     /**
-     * Retourne une représentation textuelle de l'administrateur.
-     * Le mot de passe est masqué pour éviter toute fuite de données sensibles.
+     * Vérifie si un mot de passe en clair correspond au hash stocké.
      *
-     * @return Une chaîne représentant l'administrateur sans afficher son mot de passe.
+     * @param plainPassword Mot de passe en clair saisi par l'utilisateur.
+     * @return true si la correspondance est vérifiée, sinon false.
      */
+    public boolean checkPassword(String plainPassword) {
+        System.out.println(">>> Mot de passe entré : [" + plainPassword + "]");
+        System.out.println(">>> Mot de passe hashé (stocké) : [" + password + "]");
+        return BCrypt.checkpw(plainPassword, this.password);
+    }
 
     @Override
     public String toString() {
         return "Admin{" +
                 "codeAdmin='" + codeAdmin + '\'' +
-                ", password='********'}"; // Masquer le mot de passe pour éviter de l'afficher
+                ", password='********'}";
     }
 }

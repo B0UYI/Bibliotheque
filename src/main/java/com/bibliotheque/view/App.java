@@ -200,7 +200,7 @@ public class App extends Application {
 
                 boolean success = utilisateurController.emprunterLivre(nom, prenom, email, telephone, livreSelectionne.getISBN(), dateEmprunt);
                 if (success) {
-                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Emprunt enregistré avec succès.\n\nVous avez 6 mois pour le rendre, sinon une pénalité sera appliquée.");
+                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Emprunt enregistré avec succès !\n\nVous avez 6 mois pour le rendre.");
                     loadBooks();
                 } else {
                     showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de l'emprunt.");

@@ -1,57 +1,27 @@
 package com.bibliotheque.repository;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.ResultSet;
+import java.sql.*;
 import org.mindrot.jbcrypt.BCrypt;
 
-
 /**
- * Classe permettant la gestion des administrateurs dans la base de données.
- * Elle fournit des méthodes pour vérifier l'authentification des administrateurs.
+ * Classe permettant l'authentification des administrateurs dans la base de données.
  */
-
 public class AdminRepository {
     private static final String URL = "jdbc:mysql://localhost:3306/bibliotheque";
     private static final String USER = "root";
     private static final String PASSWORD = "Aqwzsxedc12345-";
 
     /**
-     * Vérifie si un administrateur existe en base de données en comparant ses identifiants.
+     * Authentifie un administrateur en vérifiant si le mot de passe fourni correspond
+     * au mot de passe haché stocké dans la base de données.
      *
-     * @param codeAdmin Le code administrateur unique.
-     * @param password Le mot de passe associé à l'administrateur.
-     * @return true si les identifiants sont corrects et existent en base, sinon false.
-     * @throws SQLException En cas d'erreur lors de la connexion à la base de données.
-     */
-
-    public boolean ajouterAdmin(String codeAdmin, String password) {
-        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt()); // Hachage du mot de passe
-
-        String sql = "INSERT INTO admins (code_admin, password) VALUES (?, ?)";
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, codeAdmin);
-            pstmt.setString(2, hashedPassword);
-            pstmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de l'ajout de l'admin : " + e.getMessage());
-            return false;
-        }
-    }
-    /**
-     * Vérifie si l'authentification d'un administrateur est correcte en comparant les mots de passe hachés.
-     *
-     * @param codeAdmin Le code administrateur.
-     * @param password  Le mot de passe fourni par l'utilisateur.
-     * @return true si les identifiants sont corrects, sinon false.
+     * @param codeAdmin Le code administrateur saisi.
+     * @param password  Le mot de passe en clair saisi.
+     * @return true si les identifiants sont valides, sinon false.
      */
     public boolean authentifierAdmin(String codeAdmin, String password) {
         String sql = "SELECT password FROM admins WHERE code_admin = ?";
+
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -60,11 +30,25 @@ public class AdminRepository {
 
             if (rs.next()) {
                 String hashedPassword = rs.getString("password");
-                return BCrypt.checkpw(password, hashedPassword); // Comparaison sécurisée
+
+                // Affichage de debug
+                System.out.println(">>> code_admin entré : [" + codeAdmin + "]");
+                System.out.println(">>> Mot de passe en clair : [" + password + "]");
+                System.out.println(">>> Hash récupéré : [" + hashedPassword + "]");
+
+                boolean match = BCrypt.checkpw(password, hashedPassword);
+                System.out.println(">>> Résultat Bcrypt : " + match);
+
+                return match;
+            } else {
+                System.out.println(">>> Aucun administrateur trouvé avec ce code.");
             }
+
         } catch (SQLException e) {
             System.err.println("Erreur connexion MySQL : " + e.getMessage());
+            e.printStackTrace();
         }
+
         return false;
     }
 }
