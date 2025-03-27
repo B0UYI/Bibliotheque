@@ -12,8 +12,15 @@
 
     <!-- Dépendances -->
     <dependencies>
+        <!-- Ajout de la dépendance globale JUnit -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
 
-       <!-- BCrypt -->
+        <!-- BCrypt -->
         <dependency>
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
@@ -57,6 +64,37 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- JUnit 5 pour les tests paramétrés -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>1.9.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- JUnit 5 pour les tests paramétrés -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Mockito pour les tests -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.14.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>5.14.2</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- JaCoCo pour la couverture de tests -->
@@ -82,6 +120,13 @@
                 </configuration>
             </plugin>
 
+            <!-- Surefire Plugin pour les tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.2</version>
+            </plugin>
+
             <!-- Exec Plugin pour exécuter l'application -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -98,11 +143,18 @@
                 </configuration>
             </plugin>
 
-            <!-- Plugin JaCoCo pour la couverture des tests -->
+            <!-- Jacoco pour la couverture du code -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.8</version>
+                <version>0.8.11</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/view/**</exclude>
+                        <exclude>**/App*</exclude>
+                        <exclude>**/Main*</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -141,4 +193,3 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 </project>
-
