@@ -7,9 +7,11 @@ import org.mindrot.jbcrypt.BCrypt;
  * Classe permettant l'authentification des administrateurs dans la base de données.
  */
 public class AdminRepository {
+
     private static final String URL = "jdbc:mysql://localhost:3306/bibliotheque";
-    private static final String USER = "root";
-    private static final String PASSWORD = "Aqwzsxedc12345-";
+    private static final String USER = "AdminB";
+    private static final String PASSWORD = "rien";
+
 
     // Pour les tests unitaires
     private boolean testMode = false;

@@ -10,8 +10,9 @@ import java.time.LocalDate;
 
 public class UtilisateurRepository {
     private static final String URL = "jdbc:mysql://localhost:3306/bibliotheque";
-    private static final String USER = "root";
-    private static final String PASSWORD = "Aqwzsxedc12345-";
+    private static final String USER = "AdminB";
+    private static final String PASSWORD = "rien";
+
 
     /**
      * Ajoute un emprunt dans la base de données pour un utilisateur donné.
